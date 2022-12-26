@@ -22,13 +22,26 @@
         $pincode = $_POST['pincode'];
         $gender = $_POST['gender'];
         $query = "INSERT INTO user_info(regno, rollno, branch,studentemail, lastname, firstname, middlename, address, studmobno, city, pincode, gender) VALUES('$regno','$rollno','$branch','$studentemail', '$lastname','$firstname','$middlename','$address', '$studmobno','$city','$pincode','$gender')";
-        $result = mysqli_query($conn,$query);
 
-        if($result)
+        $duplicate = mysqli_query($conn, "SELECT regno from user_info where regno='$regno'");
+        if(mysqli_num_rows($duplicate)>0)
         {
-            echo "<script> location.href = 'submitted.php';</script>";
-            exit();
+            echo"<script>
+                alert('try again information already exist');
+                window.location.href='admin.html';
+                </script>";
         }
+        else
+        {
+            $result = mysqli_query($conn,$query);
+
+            if($result)
+            {
+                echo "<script> location.href = 'submitted.php';</script>";
+                exit();
+            }
+        }
+       
 
 
 

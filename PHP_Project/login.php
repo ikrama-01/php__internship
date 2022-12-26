@@ -16,27 +16,30 @@ session_start();
      {
          echo "Can't Connect to the Database";
      
-     }
+     }                               
      $username = trim($_POST['username']);
      $password = trim($_POST['password']);
+     $hash = password_hash($password, PASSWORD_DEFAULT);
+     $hashpass = password_verify($password,$hash);
      if($username=="" OR $password=="")
      {
-        echo "<script>alert('try again');
+        echo "<script> 
+        alert('try again');
         window.location.href= 'login.html';
-        </script>;"; 
+        </script>"; 
      }
      
 
-     $query = "SELECT username,password from user_login where username='$username'";
+     $query = "SELECT username, password FROM user_login WHERE username = '$username'";
      $result=mysqli_query($conn,$query);
      $row=mysqli_fetch_assoc($result);
 
-     if($username!=$row['username'] OR $password!=$row['password'])
+     if($username!=$row['username']OR $hashpass!=$row['password'])
      {
          echo " <script> alert('wrong username or password');location.href = 'login.html';</script>";
      }
 
-     else if($username==$row['username'] AND $password==$row['password'])
+     else if($username==$row['username'] AND $hashpass==$row['password'])
      {
         if(!empty($_POST['check']))
         {
